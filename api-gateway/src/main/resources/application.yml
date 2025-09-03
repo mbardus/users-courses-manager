@@ -1,0 +1,56 @@
+server:
+  port: 8080
+
+spring:
+  application:
+    name: API-GATEWAY
+  cloud:
+    gateway:
+      discovery:
+        locator:
+          enabled: true
+          lower-case-service-id: true
+      globalcors:
+        cors-configurations:
+          '[/**]':
+            allowedOrigins: "http://localhost:4200"
+            allowedMethods:
+              - GET
+              - POST
+              - PUT
+              - DELETE
+              - OPTIONS
+            allowedHeaders: "*"
+      routes:
+        - id: users-service
+          uri: lb://USERS-SERVICE
+          predicates:
+            - Path=/api/users/**
+          filters:
+            - RewritePath=/api/users(?<segment>/?.*), /users${segment}
+        - id: courses-service
+          uri: lb://courses-service
+          predicates:
+            - Path=/courses/**
+        - id: enrollments-service
+          uri: lb://enrollments-service
+          predicates:
+            - Path=/enrollments/**
+
+eureka:
+  client:
+    serviceUrl:
+      defaultZone: http://eureka-server:8761/eureka/
+    register-with-eureka: true
+    fetch-registry: true
+    initial-instance-info-replication-interval-seconds: 40
+    registry-fetch-interval-seconds: 30
+  instance:
+    preferIpAddress: true
+
+logging:
+  level:
+    org.springframework.cloud.gateway: DEBUG
+    org.springframework.amqp.rabbit.listener.SimpleMessageListenerContainer: ERROR
+    org.springframework.amqp.rabbit.connection.CachingConnectionFactory: ERROR
+    org.springframework.amqp: WARN

@@ -1,0 +1,19 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: enrollments-service
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: enrollments-service
+  template:
+    metadata:
+      labels:
+        app: enrollments-service
+    spec:
+      containers:
+        - name: enrollments-service
+          image: mbardus/enrollments-service:latest
+          ports:
+            - containerPort: 8080

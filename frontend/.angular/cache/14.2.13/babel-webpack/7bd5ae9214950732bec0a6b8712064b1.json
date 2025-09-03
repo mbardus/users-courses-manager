@@ -1,0 +1,1 @@
+{"ast":null,"code":"export const environment = {\n  production: false,\n  apiUrl: 'http://localhost:8080/api',\n  usersServiceUrl: 'http://localhost:8081',\n  coursesServiceUrl: 'http://localhost:8082',\n  enrollmentsServiceUrl: 'http://localhost:8083'\n};","map":null,"metadata":{},"sourceType":"module"}

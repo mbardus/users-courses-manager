@@ -1,0 +1,60 @@
+# eureka-deployment.yml
+
+# 1. Deployment per Eureka Server
+# Definisce come eseguire i container di Eureka nel cluster
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: eureka-server
+  labels:
+    app: eureka-server
+spec:
+  replicas: 1 # Esegue una sola istanza di Eureka
+  selector:
+    matchLabels:
+      app: eureka-server
+  template:
+    metadata:
+      labels:
+        app: eureka-server
+    spec:
+      containers:
+      - name: eureka-server
+        image: docker-repo/eureka-server:latest # <-- SOSTITUISCI CON LA TUA IMMAGINE DOCKER
+        ports:
+        - containerPort: 8761 # La porta su cui Eureka è in ascolto nel container
+        env:
+        - name: EUREKA_CLIENT_REGISTER_WITH_EUREKA
+          value: "false" # Il server non deve registrarsi con se stesso
+        - name: EUREKA_CLIENT_FETCH_REGISTRY
+          value: "false" # Non deve cercare di ottenere il registro da altri server (essendo l'unico)
+        readinessProbe: # Controlla quando il container è pronto a ricevere traffico
+          httpGet:
+            path: /actuator/health
+            port: 8761
+          initialDelaySeconds: 40
+          periodSeconds: 30
+        livenessProbe: # Controlla se il container è ancora attivo
+          httpGet:
+            path: /actuator/health
+            port: 8761
+          initialDelaySeconds: 40
+          periodSeconds: 30
+
+---
+
+# 2. Service per Eureka Server
+# Rende Eureka Server raggiungibile dagli altri servizi all'interno del cluster
+apiVersion: v1
+kind: Service
+metadata:
+  name: eureka-server # Nome DNS che gli altri servizi useranno per contattare Eureka
+  labels:
+    app: eureka-server
+spec:
+  type: ClusterIP # Espone il servizio solo all'interno del cluster
+  ports:
+  - port: 8761 # La porta del servizio
+    targetPort: 8761 # La porta del container a cui inoltrare il traffico
+  selector:
+    app: eureka-server # Seleziona i Pod gestiti dal Deployment "eureka-server"

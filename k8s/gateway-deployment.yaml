@@ -1,0 +1,48 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: api-gateway
+  labels:
+    app: api-gateway
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: api-gateway
+  template:
+    metadata:
+      labels:
+        app: api-gateway
+    spec:
+      containers:
+      - name: api-gateway
+        image: your-docker-repo/api-gateway:latest
+        ports:
+        - containerPort: 8080
+        env:
+        - name: SPRING_CLOUD_CONFIG_URI
+          value: http://config-server:8888
+        - name: EUREKA_CLIENT_SERVICE_URL_DEFAULT_ZONE
+          value: http://eureka-server:8761/eureka/
+        - name: SPRING_MONGODB_URI
+          value: mongodb://mongo:27017/yourdbname
+        - name: SPRING_RABBITMQ_HOST
+          value: rabbitmq
+        readinessProbe:
+          httpGet:
+            path: /actuator/health
+            port: 8080
+          initialDelaySeconds: 10
+          periodSeconds: 5
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: api-gateway
+spec:
+  type: LoadBalancer
+  ports:
+  - port: 80
+    targetPort: 8080
+  selector:
+    app: api-gateway

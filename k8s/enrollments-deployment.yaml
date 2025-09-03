@@ -1,0 +1,38 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: enrollments-service
+  labels:
+    app: enrollments
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: enrollments
+  template:
+    metadata:
+      labels:
+        app: enrollments
+    spec:
+      containers:
+      - name: enrollments
+        image: enrollments-service:latest
+        ports:
+        - containerPort: 8080
+        env:
+        - name: SPRING_DATA_MONGODB_URI
+          value: mongodb://mongo:27017/enrollments
+        - name: SPRING_CLOUD_CONFIG_URI
+          value: http://config-server:8888
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: enrollments-service
+spec:
+  type: ClusterIP
+  ports:
+  - port: 8080
+    targetPort: 8080
+  selector:
+    app: enrollments

@@ -1,0 +1,55 @@
+spring:
+  application:
+    name: ENROLLMENTS-SERVICE
+  data:
+    mongodb:
+      uri: mongodb://mongo:27017/enrollmentsdb
+  cloud:
+    circuitbreaker:
+      enabled: true
+app:
+  rabbitmq:
+    host: localhost
+    port: 5672
+    username: guest
+    password: guest
+    exchange: app.exchange
+    routing:
+      userCreated: user.created
+      courseCreated: course.created
+      enrollmentCreated: enrollment.created
+    queues:
+      userCreatedEnrollments: user.created.enrollments
+      courseCreatedEnrollments: course.created.enrollments
+
+    routingKey:
+      enrollmentCreated: enrollment.created
+
+server:
+  port: 8080
+
+eureka:
+  client:
+    serviceUrl:
+      defaultZone: http://eureka-server:8761/eureka/
+  instance:
+    preferIpAddress: true
+ 
+logging:
+  level:
+    org.springframework: DEBUG
+    org.springframework.amqp.rabbit.listener.SimpleMessageListenerContainer: ERROR
+    org.springframework.amqp.rabbit.connection.CachingConnectionFactory: ERROR
+    org.springframework.amqp: WARN
+
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+
+jwt:
+  secret: your_jwt_secret
+  expiration: 3600
+    

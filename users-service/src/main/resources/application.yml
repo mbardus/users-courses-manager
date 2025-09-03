@@ -1,0 +1,59 @@
+server:
+  port: 8080
+  
+spring:
+  application:
+    name: USERS-SERVICE
+  data:
+    mongodb:
+      uri: mongodb://mongo:27017/usersdb
+  cloud:
+    circuitbreaker:
+      enabled: true
+app:
+  rabbitmq:
+    host: rabbitmq
+    port: 5672
+    username: guest
+    password: guest
+    exchange: app.exchange
+    routing:
+      userCreated: user.created
+      courseCreated: course.created
+      enrollmentCreated: enrollment.created
+    queues:
+      userCreatedEnrollments: user.created.enrollments
+      courseCreatedEnrollments: course.created.enrollments
+      enrollmentCreatedUsers: enrollment.created.users
+      enrollmentCreatedCourses: enrollment.created.courses
+    routingKey:
+      userCreated: user.created
+
+eureka:
+  client:
+    serviceUrl:
+      defaultZone: http://eureka-server:8761/eureka/
+    register-with-eureka: true
+    fetch-registry: true
+    initial-instance-info-replication-interval-seconds: 40
+    registry-fetch-interval-seconds: 30
+  instance:
+    preferIpAddress: true
+ 
+logging:
+  level:
+    org.springframework: DEBUG
+    org.springframework.amqp.rabbit.listener.SimpleMessageListenerContainer: ERROR
+    org.springframework.amqp.rabbit.connection.CachingConnectionFactory: ERROR
+    org.springframework.amqp: WARN
+
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+
+jwt:
+  secret: your_jwt_secret
+  expiration: 3600

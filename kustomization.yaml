@@ -1,0 +1,30 @@
+resources:
+  - api-gateway/src/main/resources/api-gateway-deployment.yaml
+  - api-gateway/src/main/resources/api-gateway-service.yaml
+  - users-service/src/main/resources/users-service-deployment.yaml
+  - users-service/src/main/resources/users-service-service.yaml
+  - courses-service/src/main/resources/courses-service-deployment.yaml
+  - courses-service/src/main/resources/courses-service-service.yaml
+  - enrollments-service/src/main/resources/enrollments-service-deployment.yaml
+  - enrollments-service/src/main/resources/enrollments-service-service.yaml
+  - mongo/src/main/resources/mongo-deployment.yaml
+  - mongo/src/main/resources/mongo-service.yaml
+
+images:
+  - name: api-gateway
+    newName: mbardus/api-gateway
+    newTag: latest
+  - name: users-service
+    newName: mbardus/users-service
+    newTag: latest
+  - name: courses-service
+    newName: mbardus/courses-service
+    newTag: latest
+  - name: enrollments-service
+    newName: mbardus/enrollments-service
+    newTag: latest
+
+configMapGenerator:
+  - name: api-gateway-config
+    files:
+      - api-gateway/src/main/resources/api-gateway-config.yml

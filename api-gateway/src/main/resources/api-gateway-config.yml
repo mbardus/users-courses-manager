@@ -1,0 +1,12 @@
+spring:
+  application:
+    name: api-gateway
+  cloud:
+    gateway:
+      routes:
+        - id: users-service
+          uri: http://users-service:8080
+        - id: courses-service
+          uri: http://courses-service:8080
+        - id: enrollments-service
+          uri: http://enrollments-service:8080

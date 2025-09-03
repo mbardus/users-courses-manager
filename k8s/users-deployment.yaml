@@ -1,0 +1,29 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: users-service
+  labels:
+    app: users
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: users
+  template:
+    metadata:
+      labels:
+        app: users
+    spec:
+      containers:
+      - name: users-service
+        image: users-service:latest
+        ports:
+        - containerPort: 8080
+        env:
+        - name: SPRING_DATA_MONGODB_URI
+          value: "mongodb://mongo:27017/usersdb"
+        - name: SPRING_CLOUD_CONFIG_URI
+          value: "http://config-server:8888"
+        - name: MESSAGE_BROKER_URI
+          value: "amqp://rabbitmq:5672"
+      imagePullPolicy: Always
