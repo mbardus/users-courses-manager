@@ -10,7 +10,10 @@ cloud-microservices-app
 ├── courses-service        # Microservice for course management
 ├── enrollments-service    # Microservice for enrollment management
 ├── api-gateway            # API Gateway for routing requests
-├── rabbitmq         # Message broker setup
+├── rabbitmq               # Message broker setup
+├── mongo                  # Mongo DB config
+├── eureka                 # Service discovery
+├── common                 # Common configurations
 ├── frontend               # Angular frontend application
 ├── k8s                    # Kubernetes deployment configurations
 ├── .github                # GitHub Actions for CI/CD
