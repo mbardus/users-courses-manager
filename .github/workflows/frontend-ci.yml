@@ -25,6 +25,10 @@ jobs:
         run: npm install
         working-directory: frontend
 
+      - name: Add execute permission to ng
+        run: chmod +x ./node_modules/.bin/ng
+        working-directory: frontend
+
       - name: Build the application
         run: npm run build --prod
         working-directory: frontend
