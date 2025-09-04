@@ -27,6 +27,7 @@ jobs:
 
       - name: Build Docker image
         run: |
+          cd courses-service
           docker build -t courses-service .
 
       - name: Push Docker image

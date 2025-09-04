@@ -27,6 +27,7 @@ jobs:
 
       - name: Build Docker image
         run: |
+          cd api-gateway
           docker build -t api-gateway:latest .
 
       - name: Push Docker image

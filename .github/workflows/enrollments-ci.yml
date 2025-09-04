@@ -27,6 +27,7 @@ jobs:
 
       - name: Build Docker image
         run: |
+          cd enrollments-service
           docker build -t enrollments-service .
 
       - name: Push Docker image
