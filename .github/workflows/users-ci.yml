@@ -20,12 +20,14 @@ jobs:
         uses: actions/setup-java@v2
         with:
           java-version: '17'
+          distribution: 'temurin'
 
       - name: Build with Maven
         run: mvn clean install
 
       - name: Build Docker image
-        run: docker build -t users-service .
+        run: |
+          docker build -t users-service .
 
       - name: Push Docker image
         run: |

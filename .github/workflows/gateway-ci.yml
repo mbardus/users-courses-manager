@@ -20,13 +20,14 @@ jobs:
         uses: actions/setup-java@v2
         with:
           java-version: '17'
+          distribution: 'temurin'
 
       - name: Build with Maven
-        run: mvn clean install -f api-gateway/pom.xml
+        run: mvn clean install
 
       - name: Build Docker image
         run: |
-          docker build -t api-gateway:latest -f api-gateway/Dockerfile .
+          docker build -t api-gateway:latest .
 
       - name: Push Docker image
         run: |
