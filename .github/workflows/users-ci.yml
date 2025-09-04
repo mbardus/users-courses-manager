@@ -29,14 +29,3 @@ jobs:
         run: |
           cd users-service
           docker build -t users-service .
-
-      - name: Push Docker image
-        run: |
-          echo "${{ secrets.DOCKER_PASSWORD }}" | docker login -u "${{ secrets.DOCKER_USERNAME }}" --password-stdin
-          docker tag users-service ${{ secrets.DOCKER_USERNAME }}/users-service:latest
-          docker push ${{ secrets.DOCKER_USERNAME }}/users-service:latest
-
-      - name: Deploy to Kubernetes
-        run: |
-          kubectl apply -f ../k8s/users-deployment.yaml
-          kubectl rollout status deployment/users-service

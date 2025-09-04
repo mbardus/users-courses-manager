@@ -32,9 +32,3 @@ jobs:
       - name: Build the application
         run: npm run build --prod
         working-directory: frontend
-
-      - name: Deploy to Cloud (optional)
-        run: echo "Deploying to cloud..."
-        working-directory: frontend
-        env:
-          CLOUD_API_KEY: ${{ secrets.CLOUD_API_KEY }}
